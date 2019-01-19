@@ -1,4 +1,10 @@
-# xtrlock-pam
+# xtrlock-howdy
+
+**xtrlock-howdy** is forked project from xtrlock-pam to be compatible with howdy, Windows Hello (TM) style authentication for Linux.
+
+Press Alt_L, Alt_R, Super_L or Super_R to start authentication with a dummy password.
+
+-----
 
 **xtrlock-pam** is PAM based X11 screen locker that hides desktop content.
 

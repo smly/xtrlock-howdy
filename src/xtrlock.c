@@ -60,11 +60,13 @@ Window root;
 int screen;
 Colormap cmap;
 
-int bg_action = MBG;
+int bg_action = MNONE;
 char *pam_module = "system-local-login";
 
+int auth_pam_nopassword(char *user, char *module);
 int auth_pam(char *user, char *password, char *module);
 
+// TODO: Revert here to use naitve auth.
 int passwordok(char *password)
 {
     return auth_pam(getenv("USER"), password, pam_module);
@@ -285,6 +287,9 @@ lock(int mode)
             switch (ks) {
             case XK_Escape: case XK_Clear:
                 rlen=0; break;
+            case XK_Alt_L: case XK_Alt_R: case XK_Super_L: case XK_Super_R:
+                if (auth_pam_nopassword(getenv("USER"), pam_module)) exit(0);
+                rlen=0; break;
             case XK_Delete: case XK_BackSpace:
                 if (rlen>0)
                     rlen--;
@@ -335,7 +340,7 @@ help()
     printf("Options:\n");
     printf(" -h      This help message\n");
     printf(" -p MOD  PAM module, default is system-local-login\n");
-    printf(" -b BG   background action, none, blank or bg, default is bg\n");
+    printf(" -b BG   background action, none, blank or bg, default is none\n");
 }
 
 int main(int argc, char *argv[])
